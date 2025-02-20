@@ -6,48 +6,65 @@
     <title>Moodle megoldások</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern betűtípus */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
-            color: #333; /* Sötétebb szöveg a jobb olvashatóságért */
+            color: #333;
+            display: flex; /* Flexbox elrendezés */
+            flex-direction: column; /* Függőleges elrendezés */
+            min-height: 100vh; /* Minimum 100vh magasság */
         }
         h2 {
-            color: #007bff; /* Kék szín a címnek */
+            color: #007bff;
             margin-bottom: 20px;
+        }
+        .content { /* Tartalom konténer */
+            flex: 1; /* Kitölti a rendelkezésre álló helyet */
+        }
+        .search-container { /* Kereső konténer */
+            background-color: #f8f9fa; /* Világosabb háttér */
+            padding: 15px;
+            border-top: 1px solid #dee2e6; /* Vékony vonal a tetején */
+            position: sticky; /* Rögzítés az aljára */
+            bottom: 0;
+            z-index: 100; /* Biztosítja, hogy a kereső felül legyen */
         }
         input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box; /* A padding ne növelje a szélességet */
+            box-sizing: border-box;
         }
         .result-container {
             background: white;
             padding: 20px;
-            border-radius: 8px; /* Nagyobb lekerekítés */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Finomabb árnyék */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
         }
         .result {
             padding: 15px;
-            border-bottom: 1px solid #eee; /* Világosabb vonal */
+            border-bottom: 1px solid #eee;
             white-space: pre-line;
         }
         .result:last-child {
-            border-bottom: none; /* Utolsó elem alatti vonal eltávolítása */
+            border-bottom: none;
         }
         .bold {
-            font-weight: 600; /* Közepes vastagságú félkövér */
-            color: #0056b3; /* Sötétebb kék a válaszoknak */
+            font-weight: 600;
+            color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h2>Moodle Megoldáskereső</h2>
-    <input type="text" id="search" placeholder="Keresés...">
-    <div class="result-container" id="results"></div>
+    <div class="content">
+        <h2>Moodle Megoldáskereső</h2>
+        <div class="result-container" id="results"></div>
+    </div>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Keresés...">
+    </div>
 
     <script>
         const data = [
@@ -122,9 +139,9 @@
         function renderResults(query) {
             const resultsContainer = document.getElementById('results');
             resultsContainer.innerHTML = '';
-            const normalizedQuery = normalize(query.toLowerCase()); // Normalizáljuk a keresést
+            const normalizedQuery = normalize(query.toLowerCase());
             data.forEach(item => {
-                const normalizedItem = normalize(item.toLowerCase()); // Normalizáljuk az elemeket
+                const normalizedItem = normalize(item.toLowerCase());
                 if (normalizedItem.includes(normalizedQuery)) {
                     const div = document.createElement('div');
                     div.classList.add('result');
@@ -143,4 +160,3 @@
     </script>
 </body>
 </html>
-
