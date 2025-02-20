@@ -5,11 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moodle megoldások</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
-        .result-container { background: white; padding: 10px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        .result { padding: 10px; border-bottom: 1px solid #ddd; white-space: pre-line; }
-        .bold { font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern betűtípus */
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333; /* Sötétebb szöveg a jobb olvashatóságért */
+        }
+        h2 {
+            color: #007bff; /* Kék szín a címnek */
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* A padding ne növelje a szélességet */
+        }
+        .result-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px; /* Nagyobb lekerekítés */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Finomabb árnyék */
+        }
+        .result {
+            padding: 15px;
+            border-bottom: 1px solid #eee; /* Világosabb vonal */
+            white-space: pre-line;
+        }
+        .result:last-child {
+            border-bottom: none; /* Utolsó elem alatti vonal eltávolítása */
+        }
+        .bold {
+            font-weight: 600; /* Közepes vastagságú félkövér */
+            color: #0056b3; /* Sötétebb kék a válaszoknak */
+        }
     </style>
 </head>
 <body>
@@ -83,11 +115,17 @@
         "31. Legnagyobb felületű szervrendszerünk a(bőr). Helyzete és felépítése szorosan összefügg sokoldalú működésével. Jelentős mértékben hozzájárul testünk védelméhez. A verejtéktermeléssel részt vesz a (hő)-, és a vízháztartás szabályozásában, valamint a (kiválasztá)-ban. A receptorok segítségével az (érzékelés)-ben.\nLegnagyobb felületű szervrendszerünk a(bőr). Helyzete és felépítése szorosan összefügg sokoldalú működésével. Jelentős mértékben hozzájárul testünk védelméhez. A verejtéktermeléssel részt vesz a (hő)-, és a vízháztartás"
         ];
 
+        function normalize(text) {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
         function renderResults(query) {
             const resultsContainer = document.getElementById('results');
             resultsContainer.innerHTML = '';
+            const normalizedQuery = normalize(query.toLowerCase()); // Normalizáljuk a keresést
             data.forEach(item => {
-                if (item.toLowerCase().includes(query)) {
+                const normalizedItem = normalize(item.toLowerCase()); // Normalizáljuk az elemeket
+                if (normalizedItem.includes(normalizedQuery)) {
                     const div = document.createElement('div');
                     div.classList.add('result');
                     const [question, answer] = item.split('\n');
@@ -98,11 +136,11 @@
         }
 
         document.getElementById('search').addEventListener('input', function() {
-            renderResults(this.value.toLowerCase());
+            renderResults(this.value);
         });
 
-        // Alapból jelenjen meg az összes kérdés
-        renderResults('');
+        renderResults(''); // Alapból jelenjen meg az összes kérdés
     </script>
 </body>
 </html>
+
