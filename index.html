@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodle megoldások</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+        .result-container { background: white; padding: 10px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .result { padding: 10px; border-bottom: 1px solid #ddd; white-space: pre-line; }
+        .bold { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Moodle Megoldáskereső</h2>
+    <input type="text" id="search" placeholder="Keresés...">
+    <div class="result-container" id="results"></div>
+
+    <script>
+        const data = [
+
+        "1. Párosítsd!\nSzervezet idült gyulladásos megbetegedése, autoimmun betegség → reuma, az ízületi fej az ízületi vápából kimozdul és nem tér vissza eredeti helyére → ficam, az ízületi fej kimozdul az ízületi árokból, majd visszatér az alaphelyzetébe → rándulás, az elzáródott szőrtüszők begyulladnak vagy felülfertőződnek, begennyesednek → akne,  jóindulatú elváltozása a bőr melanocitáinak felszaporodása miatt → anyajegy, csont szerkezetét alkotó gerendák elvékonyodnak, a csontok tömege csökken → csontritkulás,  a megvastagodott szaruréteg elzárja a szőrtüsző, illetve a faggyúmirigy nyílását → mitesszer, rosszindulatú festékes anyajegydaganat → melanoma.",
+
+        "2. (nincs cím) piros izmok elöl hátul\nEgyenes hasizom → 5, deltaizom → 4, széles hátizom → 1, ferde hasizom → 6, nagy mellizom → 8, trapézizom → 2.",
+
+        "3. (nincs cím) üldögélő csontváz\nSzegycsont → 18, bordák → 19, gerincoszlop → 20, singcsont → 4, térdkalács → 21.",
+
+        "4. Csoportosítsd!\nCentiméteres nagyságot meghaladó gyulladt csomó a bőrben → furunkulus, a szőrtüsző kivezetőnyílásán apró fekete pont jelenik meg → mitesszer, a szőrtüsző gyulladása → pattanás.",
+
+        "5. (nincs cím)\nVérerek → 6, izomfonalak → 1, izomrost → 9, rostköteg → 8, kötőszövet → 7.",
+
+        "6. Párosítsd!\nA → fejbicccentő izom, F → karhajlító izom, B → rágóizom, G → hasizom, E → nagy mellizom, H → combfeszítő izom, D → deltaizom, C → mimikai izmok.", 
+
+        "7. (nincs cím) lépcsős erek v id\nÉlőhám → 7, szőrszál → 4, irha → 2, hám → 3, szaruréteg → 5, bőralja → 1, fájdalomérző receptor → 6.",
+
+        "8. Csoportosítsd!\nÍzületi szalag → G, combcsont → H, ízületi fej → F, ízületi nedv → A.",
+
+        "A mozgás aktív szervei a (izmok), passzív szervei a (csontok) és az azokat összekötő (inok). Ezek együtt építik fel a mozgászervrendszert, amely a mozgáson kívül a test támasztását, szilárdítását, üregeiben a belső szervek védelmét is biztosítja.\nA mozgás aktív szervei a (izmok), passzív szervei a (csontok) és az azokat összekötő (inok). Ezek együtt építik fel a mozgászervrendszert, amely a mozgáson kívül a test támasztását, szilárdítását, üregeiben a belső szervek védelmét is biztosítja.",
+
+        "9. Csoportosítsd!\nÍzületi vápa → E, ízületi porc → C, ízületi tok → B, ízületi rés → D.",
+
+        "11. (nincs cím)\ndeltaizom → , háromfejű karizom → , alkarfeszítő izom → , alkarhajlító izom → , kétfejű karizom → .\n",
+
+        "12. Csoportosítsd!\nrugalmasságát a fehérjerostok biztosítják → irharéteg, ereket nem tartalmaz → hámréteg.\n",
+
+        "13. A kép az ember bőrének felépítését mutatja. Válaszolj röviden, néhány szóban!\nA vérellátás fokozódik, így a vér által szállított hő leadása is nő.\n",
+
+        "14. Írja az alábbi állítások számát a halmazábra megfelelő helyére!\nSzélessége jól mutatja a másodlagos nemi jellegek. → C, A hozzá csatlakozó csöves csonttal ízületesen kapcsolódik. → F, Három csont összenövéséből jött létre. → C, A falcsonttal varratosan kapcsolódik. → A.\n",
+
+        "15. A bőr érzékszerv, védő és szabályozó szerepe is van. Tanulmányozza figyelmesen az emberi bőr ábráját!\nRészt vesz a kiválasztásban. → F, Pigmentsejtjei kiszűrik az ultraibolya sugarakat. → B, Felmelegedéskor működése úgy változik meg, hogy a szervezet fokozza hőleadását, párologtatás nélkül. → C, A D-vitamin egyik formája itt jön létre. → B, Hőszigetelő réteg. → E, Nyomást érzékelő receptor. → D.\n",
+
+        "16. Az izomrángás, Válasszon ki egyet\ninger hatására történő összehúzódás, majd elernyedés.\n",
+
+        "17. (nincs cím)\nsejtmagok → , izom → , izomfonalak → , izompólya (vastagabb kötőszövetes burok) → , ín → .\n",
+
+        "18. (nincs cím)\ncsigolyatest → , harántnyúlvány → , csigolyalyuk → , csigolyaív → , tövisnyúlvány → , felső izületi nyúlvány → .\n",
+
+        "19. Csoportosítsd!\nátalakulhat a másikká → mindkettő, apoláris anyagok raktára → sárga csontvelő, a csontok üregrendszerében találjuk → mindkettő, a vér alakos elemei termelődnek itt → vörös csontvelő, nagy vérveszteség esetén átalakul → sárga csontvelő.\n",
+
+        "20. Írja az alábbi állítások számát a halmazábra megfelelő helyére!\nA törzsváz csontja (a gerincoszlop része). → G, Szivacsos állomány található benne. → E, Lapos csont. → B, Csöves csont. → H.\n",
+
+        "21. (nincs cím)\nfaggyúmirigy → , verejtékmirigy → , szőrmerevítő izom → , kapillárisok → , zsírszövet → , nyomásreceptor → , szőrhagyma → , idegrost → .\n",
+
+        "22. Csoportosítsd!\nelmozdulása eredményezi az izom-összehúzódást → mindkettő, hosszabb és vastagabb molekulák → miozin, az izmot építi fel → mindkettő, fehérje → mindkettő.\n",
+
+        "23. Csoportosítsd!\nerek nem lépnek bele → egyik sem, a szájnyílás körül ilyen izom található → egyik sem, kötőszöveti pólya veszi körül → mindkettő, ha összehúzódik, az ujj begörbül → hajlítóizom, eredése és tapadása van → mindkettő, összehúzódásakor az izom eredési pontja a helyén marad → mindkettő, a combon elöl található az embernél → feszítőizom, tartós izom-összehúzódásra képes → mindkettő.\n",
+
+        "24. Csoportosítsd!\nízületi szalagok is erősíthetik → ízületes csontösszeköttetés, porc is mindig jelentős lehet henne → ízületes csontösszeköttetés, több irányba is elfordulhatnak a csontok → ízületes csontösszeköttetés, a könyök ilyen típusú összeköttetés → ízületes csontösszeköttetés, a kötőszövet is fontos szerepet játszhat a kapcsolatban → ízületes csontösszeköttetés, az agykoponya csontjai így kapcsolódnak össze → folyamatos csontösszeköttetés.\n",
+
+        "25. Csoportosítsd!\ncsigolya → egyik sem, állcsont → arckoponya része, ékcsont → agykoponya része, falcsont → agykoponya része, kulcscsont → vállöv csontja.\n",
+
+        "26. A kép az ember bőrének felépítését mutatja. Válaszolj röviden, néhány szóban! Melyik fizikai folyamat révén és hogyan védi testünket a túlzott felmelegedéstől az „F” jelű rész?\nA verejték párolgása hűti a bőr felszínét.\n",
+
+        "27. Csoportosítsd!\na csontok anyaga megszakítás nélkül megy át egymásba → folyamatos csontösszeköttetés, a két kapcsolódó csont az egymáshoz képest történő elmozdulást is lehetővé teheti → ízületes csontösszeköttetés, ilyen a varratos kapcsolat → folyamatos csontösszeköttetés, a gerincoszlop csigolyái így kapcsolódnak össze → mindkettő, nedv, tok, szalag szerepel alkotóként → ízületes csontösszeköttetés, a homlokcsont és a nyakszirtcsont összekapcsolódása ilyen → egyik sem.\n",
+
+        "28. Csoportosítsd!\nnyújtáskor elernyed → hajlítóizmok, más csontokon erednek és tapadnak → mindkettő, hajlításkor összehúzódik → hajlítóizmok, gyűrű alakúak → egyik sem, a végtagokon találhatók → mindkettő.\n",
+
+        "29. A kép az ember bőrének felépítését mutatja. Válaszolj röviden, néhány szóban! A bőr pigmenttartalmú sejtjeinek egyre gyakoribb ráktípusa a melanóma. Írjon le egy fontos szabályt, amelynek betartásával csökkenthetjük kialakulásának kockázatát!\nErős napsütésben (11 és 15 h között nyáron) fedetlen bőrrel ne tartózkodjunk sokáig. / Az ultraibolya sugárzást kiszűrő védőkrémek alkalmazása. / Rendszeres rákszűrés, önmegfigyelés. Más ésszerű én’elés is elfogadható. Például: az UV-sugárzás erősségének nyomon követése a meteorológiai jelentésekben, és az ennek megfelelő mértékű napfényen tartózkodás. Vagy: mértékletes napozással a védő pigmentréteg erősítése.\n",
+
+        "30. (nincs cím) csontvárt koponya\nnyakszirtcsont → , halántékcsont → , homlokcsont → , falcsont → .\n",
+
+        "31. Legnagyobb felületű szervrendszerünk a(bőr). Helyzete és felépítése szorosan összefügg sokoldalú működésével. Jelentős mértékben hozzájárul testünk védelméhez. A verejtéktermeléssel részt vesz a (hő)-, és a vízháztartás szabályozásában, valamint a (kiválasztá)-ban. A receptorok segítségével az (érzékelés)-ben.\nLegnagyobb felületű szervrendszerünk a(bőr). Helyzete és felépítése szorosan összefügg sokoldalú működésével. Jelentős mértékben hozzájárul testünk védelméhez. A verejtéktermeléssel részt vesz a (hő)-, és a vízháztartás"
+        ];
+
+        function renderResults(query) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+            data.forEach(item => {
+                if (item.toLowerCase().includes(query)) {
+                    const div = document.createElement('div');
+                    div.classList.add('result');
+                    const [question, answer] = item.split('\n');
+                    div.innerHTML = `<span>${question}</span><br><span class='bold'>${answer}</span>`;
+                    resultsContainer.appendChild(div);
+                }
+            });
+        }
+
+        document.getElementById('search').addEventListener('input', function() {
+            renderResults(this.value.toLowerCase());
+        });
+
+        // Alapból jelenjen meg az összes kérdés
+        renderResults('');
+    </script>
+</body>
+</html>
